@@ -1,15 +1,9 @@
-/*
- * Demo program for Exercise 2.
- * Author: Benjamin Saldman.
- */
-
 #include "Graph.hpp"
 #include "Algorithms.hpp"
-using ariel::Algorithms;
-
-#include <iostream>
 #include <stdexcept>
 #include <vector>
+using ariel::Algorithms;
+using ariel::Graph;
 using namespace std;
 
 int main()
@@ -46,7 +40,7 @@ int main()
 
     // 5x5 matrix that reprsents a connected weighted graph.
     vector<vector<int>> graph3 = {
-        {0, 1, 2, 0, 0},
+        {0, 1, 2, 0, 0},s
         {1, 0, 3, 0, 0},
         {2, 3, 0, 4, 0},
         {0, 0, 4, 0, 5},
