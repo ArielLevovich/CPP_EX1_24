@@ -6,7 +6,7 @@ namespace ariel{
     class Graph{
         private:
             int vertecies;
-            vector<vector<int>> adjMatrix;
+        vector<vector<int>> adjMatrix;
         
         public:
             void loadGraph(const vector<vector<int>> &graph){

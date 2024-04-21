@@ -9,7 +9,7 @@ namespace ariel {
         static std::string shortestPath(Graph g, int des, int src);
         static std::string isBipartite(Graph g);
         static bool negativeCycle(Graph g); 
-        void DFS(Graph g,int i,std::vector<std::vector<bool>> vec1);
+        static void DFS(Graph g,int i,std::vector<std::vector<bool>> vec1);
     };
 }
 
