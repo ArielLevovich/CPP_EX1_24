@@ -1,16 +1,18 @@
+#include <string>
+#include <vector> // Include for std::vector
+
 #ifndef ALGORITHMS_HPP
 #define ALGORITHMS_HPP
-#include "Graph.hpp"
 
 namespace ariel {
     namespace Algorithms {
-        static bool isConnected(Graph g);
-        static bool isContainsCycle(Graph g); 
-        static std::string shortestPath(Graph g, int des, int src);
-        static std::string isBipartite(Graph g);
-        static bool negativeCycle(Graph g); 
-        static void DFS(Graph g,int i,std::vector<std::vector<bool>> vec1);
-    };
-}
+        static bool isConnected(const Graph& g); 
+        static bool isContainsCycle(const Graph& g); 
+        static std::string shortestPath(const Graph& g, int src, int dest); 
+        static std::string isBipartite(const Graph& g); 
+        static bool negativeCycle(const Graph& g); 
+        static void DFS(const Graph& g, int i); 
+    }
+} 
 
-#endif 
+#endif // ALGORITHMS_HPP
