@@ -1,6 +1,7 @@
 #include "Graph.hpp"
 #include "Algorithms.hpp"
 #include <stdexcept>
+#include <iostream>
 #include <vector>
 using ariel::Algorithms;
 using ariel::Graph;
@@ -40,11 +41,12 @@ int main()
 
     // 5x5 matrix that reprsents a connected weighted graph.
     vector<vector<int>> graph3 = {
-        {0, 1, 2, 0, 0},s
+        {0, 1, 2, 0, 0},
         {1, 0, 3, 0, 0},
         {2, 3, 0, 4, 0},
         {0, 0, 4, 0, 5},
-        {0, 0, 0, 5, 0}};
+        {0, 0, 0, 5, 0}
+    };
     g.loadGraph(graph3); // Load the graph to the object.
 
     g.printGraph();                                    // Should print: "Graph with 5 vertices and 10 edges."
