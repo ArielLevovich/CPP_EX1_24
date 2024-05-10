@@ -6,23 +6,44 @@
 using namespace std;
 
 namespace ariel {
-    void Graph::loadGraph(const vector<vector<int>>& graph) {
-            vertices = graph.size();
-            adjMatrix = graph;  
+    bool Graph::isSym(const vector<vector<int>> mtr){
+        //function that checks if a matrix is symetric - means the graph is undirected.
+        for (unsigned int i = 0; i < vertices; i++) {
+            for (unsigned int j = 0; j < vertices; j++) { 
+                if (mtr[i][j] != mtr[j][i]) {
+                    return false; //means the graph is directed
+                }
+            }
         }
-
-    // Print the details of the graph
+        return true;
+    } 
+    void Graph::loadGraph(const vector<vector<int>> mtr) {
+            vertices = mtr.size();
+            if(isSym(mtr)){
+                setAdjMatrix(mtr,false);  //if the matrix is symetric , then set the bool isDirectedGraph = false
+            }else{
+                setAdjMatrix(mtr,true);
+            }     
+    }
+    
     void Graph::printGraph() {
         int edges = 0;
-        vector<vector<bool>> boolMat(vertices, vector<bool>(vertices, false));  
-
-        for (unsigned int i = 0; i < vertices; i++) {
-            for (unsigned int j = 0; j < vertices; j++) {
-                if (adjMatrix[i][j] != 0 && !boolMat[i][j]) {  
-                    if (adjMatrix[i][j] == adjMatrix[j][i]) {
-                        boolMat[j][i] = true;  //for the case of undirected graphs - won't count the same edge twice.
+        if (isDirectedGraph) {
+            // Count all non-zero entries for a directed graph
+            for (unsigned int i = 0; i < vertices; i++) {
+                for (unsigned int j = 0; j < vertices; j++) {
+                    if (adjMatrix[i][j] != 0) {
+                        edges++;
                     }
-                    edges++;
+                }
+            }
+        } else {
+            // Count each edge only once for an undirected graph
+            for (unsigned int i = 0; i < vertices; i++) {
+                for (unsigned int j = i; j < vertices; j++) { // Start from i to avoid counting twice
+                    if (adjMatrix[i][j] != 0) {
+                        edges++;
+                    }
                 }
             }
         }
@@ -48,16 +69,24 @@ namespace ariel {
     }
 
     // Getter for the adjacency matrix
-    const vector<vector<int>>& Graph::getAdjMatrix() const {
+    const vector<vector<int>> Graph::getAdjMatrix() const {
         return adjMatrix;
     }
 
     // Setter for the adjacency matrix
-    void Graph::setAdjMatrix(const vector<vector<int>>& matrix) {
-        if (matrix.size() == vertices) {
-            adjMatrix = matrix;
-        } else {
-            cout << "Error: Matrix size does not match the number of vertices." << endl;
+    void Graph::setAdjMatrix(const vector<vector<int>> graph, bool isDirectedGraph) {
+        // Check if the matrix is square
+        unsigned int rows = graph.size();
+        for (const auto& row : graph) {
+            if (row.size() != rows) {
+                throw std::invalid_argument("Invalid graph: The graph is not a square matrix.");
+            }
         }
+        this->adjMatrix = graph;
+        this->isDirectedGraph = isDirectedGraph;
     }    
+    
+    bool Graph::isDirected() const {
+        return isDirectedGraph;
+    }
 }
