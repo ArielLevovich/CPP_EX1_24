@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-std=c++11 -Werror -Wall -Wextra
+CXXFLAGS=-std=c++11 -g -Werror -Wall -Wextra
 VALGRIND_FLAGS=-v --leak-check=full --show-leak-kinds=all  --error-exitcode=99
 
 SOURCES=Graph.cpp Algorithms.cpp TestCounter.cpp Test.cpp
