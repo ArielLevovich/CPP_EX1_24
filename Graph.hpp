@@ -10,12 +10,15 @@ namespace ariel {
         private:
             unsigned int vertices;  
             vector<vector<int>> adjMatrix;
+            bool isDirectedGraph;
         public:
             void printGraph();
-            void loadGraph(const std::vector<std::vector<int>> &graph);
+            void loadGraph(const std::vector<std::vector<int>> graph);
             unsigned int getVertices() const;
             void setVertices(unsigned int v);
-            const vector<vector<int>>& getAdjMatrix() const;
-            void setAdjMatrix(const vector<vector<int>>& matrix);
+            const vector<vector<int>> getAdjMatrix() const;
+            void setAdjMatrix(const vector<vector<int>> matrix, bool isDirected);
+            bool isSym(const vector<vector<int>> mtr);
+            bool isDirected() const;
     };
 }
