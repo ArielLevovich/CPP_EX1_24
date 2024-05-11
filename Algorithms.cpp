@@ -6,6 +6,7 @@
 #include <queue>
 #include <algorithm>
 #include <sstream>
+#include <limits>
 #include "Algorithms.hpp"
 #include "NegativeCycleException.hpp"
 
@@ -118,22 +119,20 @@ namespace ariel {
         vector<int> parent(vertices, -1);
 
         dist[src] = 0; // Initialize the distance to the source
+        vector<vector<int>> adj = g.getAdjMatrix();
 
-        // Relax all edges |V| - 1 times
-        for (int i = 0; i < vertices - 1; ++i) {
-            bool update = false;
-            for (int u = 0; u < vertices; ++u) {
-                for (int v = 0; v < vertices; ++v) {
-                    if (g.getAdjMatrix()[u][v] != 0 && dist[u] != INT_MAX && dist[u] + g.getAdjMatrix()[u][v] < dist[v]) {
-                        dist[v] = dist[u] + g.getAdjMatrix()[u][v];
-                        parent[v] = u;
-                        update = true;
-                    }
+        // Relax all edges |V| - 1 times        
+        for (int u = 0; u < vertices; ++u) {
+            for (int v = 0; v < vertices; ++v) {
+                if (u == v || adj[u][v] == 0) continue;
+
+                if (v != src && dist[u] != INT_MAX && dist[u] + adj[u][v] < dist[v]) {
+                    dist[v] = dist[u] + g.getAdjMatrix()[u][v];
+                    parent[v] = u;                    
                 }
             }
-            if (!update) break; // Early exit if no update in a whole pass
         }
-
+        
         // Construct the path from src to end if reachable
         vector<int> path;
         if (dist[end] == INT_MAX) return path; // Return empty if no path
@@ -147,10 +146,12 @@ namespace ariel {
 
         // Now check for negative-weight cycles only on the path from src to dest
         if (!path.empty() && dist[path.back()] != INT_MAX) {
-            for (size_t i = 0; i < path.size() - 1; ++i) {
+            // for directed graphs, examine also the edge bringing back to the source vertice.
+            size_t last = g.isDirected() ? path.size() : path.size()-1;
+            for (size_t i = 0; i < last; ++i) {
                 int u = path[i];
-                int v = path[i + 1];
-                if (dist[u] + g.getAdjMatrix()[u][v] < dist[v]) {
+                int v = path[(i + 1) % path.size()];
+                if (dist[u] + g.getAdjMatrix()[u][v] < dist[v]) {                 
                     throw NegativeCycleException("The graph contains a negative weight cycle.");
                 }
             }
@@ -158,6 +159,49 @@ namespace ariel {
 
         return path;
     }   
+    // vector<int> Algorithms::bellmanFord(const Graph g, int src, int end) {
+    //     vector<int> path;        
+    //     int V = g.getVertices();
+    //     vector<vector<int>> adj = g.getAdjMatrix();
+    //     int dist[V];
+
+    //     // Step 1: Initialize distances from src to all other
+    //     // vertices as INFINITE
+    //     for (int i = 0; i < V; i++)
+    //         dist[i] = INT_MAX;
+    //     dist[src] = 0;
+    //     path.push_back(src);
+
+    //     // Step 2: Relax all edges |V| - 1 times. A simple
+    //     // shortest path from src to any other vertex can have
+    //     // at-most |V| - 1 edges
+    //     for (int i = 0; i < V; i++) {
+    //         for (int j = 0; j < V; j++) {
+    //             if (i == j || adj[i][j] == 0) continue;
+    //             int weight = adj[i][j];
+    //             if (dist[i] != INT_MAX && dist[i] + weight < dist[j]) {
+    //                 path.push_back(j);
+    //                 dist[j] = dist[i] + weight;
+    //             }
+    //         }
+    //     }
+
+    //     // Step 3: check for negative-weight cycles.  The above
+    //     // step guarantees shortest distances if graph doesn't
+    //     // contain negative weight cycle.  If we get a shorter
+    //     // path, then there is a cycle.
+    //     for (int i = 0; i < V; i++) {
+    //         for (int j = 0; j < V; j++) {
+    //             if (i == j || adj[i][j] == 0) continue;
+    //             int weight = adj[i][j];
+    //             if (dist[i] != INT_MAX && dist[i] + weight < dist[j]) {
+    //                 throw NegativeCycleException("The graph contains a negative weight cycle.");
+    //             }            
+    //         }
+    //     }                  
+
+    //     return path;
+    // }
 
     std::string Algorithms::shortestPath(const Graph g, int src, int dest) {
         try {
@@ -177,6 +221,7 @@ namespace ariel {
             return e.what();  // Return the error message if a negative cycle is detected
         }
     }
+
     /*
     Using BFS: Start from any unvisited vertex and assign it a color (say, red). 
     All its neighbors are given the opposite color (say, blue). 
