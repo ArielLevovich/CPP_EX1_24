@@ -20,8 +20,9 @@ int main()
     g.printGraph();                                    
     cout << "Is graph directed:" << g.isDirected() << endl;
     cout << "Is graph connected:" << Algorithms::isConnected(g) << endl; 
-    cout << Algorithms::shortestPath(g, 0, 2) << endl; 
-    cout << Algorithms::isContainsCycle(g) << endl; 
+    cout << Algorithms::shortestPath(g, 0, g.getVertices()-1) << endl; 
+    cout << Algorithms::isContainsCycle(g) << endl;
+    cout << Algorithms::hasNegativeCycle(g) << endl;     
     cout << Algorithms::isBipartite(g) << endl;        
 
     // 5x5 matrix that represents a non-connected graph with a cycle.
@@ -37,8 +38,9 @@ int main()
     g.printGraph();            
     cout << "Is graph directed:" << g.isDirected() << endl;
     cout << "Is graph connected:" << Algorithms::isConnected(g) << endl;        
-    cout << Algorithms::shortestPath(g, 0, 4) << endl; 
+    cout << Algorithms::shortestPath(g, 0, g.getVertices()-1) << endl;
     cout << Algorithms::isContainsCycle(g) << endl; 
+    cout << Algorithms::hasNegativeCycle(g) << endl;
     cout << Algorithms::isBipartite(g) << endl;        
 
     // 5x5 matrix that reprsents a connected weighted graph.
@@ -52,12 +54,13 @@ int main()
     
     g.loadGraph(graph3); // Load the graph to the object.
 
-    g.printGraph();                                    // Should print: "Graph with 5 vertices and 10 edges."
+    g.printGraph();                                    
     cout << "Is graph directed:" << g.isDirected() << endl;
     cout << "Is graph connected:" << Algorithms::isConnected(g) << endl; 
-    cout << Algorithms::shortestPath(g, 0, 4) << endl; // Should print: 0->2->3->4.
-    cout << Algorithms::isContainsCycle(g) << endl;        
-    cout << Algorithms::isBipartite(g) << endl;        // Should print: "The graph is bipartite: A={0, 2, 4}, B={1, 3}."
+    cout << Algorithms::shortestPath(g, 0, g.getVertices()-1) << endl;
+    cout << Algorithms::isContainsCycle(g) << endl;    
+    cout << Algorithms::hasNegativeCycle(g) << endl;    
+    cout << Algorithms::isBipartite(g) << endl;        
 
     // 5x4 matrix that reprsents invalid graph.
     const vector<vector<int>> graph4 = {
@@ -90,7 +93,25 @@ int main()
     g.printGraph();            
     cout << "Is graph directed:" << g.isDirected() << endl;
     cout << "Is graph connected:" << Algorithms::isConnected(g) << endl;        
-    cout << Algorithms::shortestPath(g, 0, 4) << endl; 
+    cout << Algorithms::shortestPath(g, 0, g.getVertices()-1) << endl;
     cout << Algorithms::isContainsCycle(g) << endl; 
+    cout << Algorithms::hasNegativeCycle(g) << endl;
+    cout << Algorithms::isBipartite(g) << endl;    
+
+    // 7x7 matrix that represents a non-connected graph with a cycle.
+    const vector<vector<int>> graph6 = {
+        {0, 0, 0, 0},
+        {4, 0, -6, 0},
+        {0, 0, 0, 5},
+        {0, -2, 0, 0}};
+
+    g.loadGraph(graph6); // Load the graph to the object.
+
+    g.printGraph();            
+    cout << "Is graph directed:" << g.isDirected() << endl;
+    cout << "Is graph connected:" << Algorithms::isConnected(g) << endl;        
+    cout << Algorithms::shortestPath(g, 0, g.getVertices()-1) << endl;
+    cout << Algorithms::isContainsCycle(g) << endl; 
+    cout << Algorithms::hasNegativeCycle(g) << endl;
     cout << Algorithms::isBipartite(g) << endl;    
 }
