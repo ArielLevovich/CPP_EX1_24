@@ -21,8 +21,10 @@ namespace ariel {
             static vector<int> bellmanFord(const Graph g, int src, int end);
             static bool isCyclicUtilUndirected(const Graph g, unsigned int v, bool visited[], int parent, vector<int>& path);
             static bool isCyclicUndirected(const Graph g);
-            static bool isCyclicUtilDirected(const Graph g, unsigned int v, bool visited[], bool* recStack);
+            static bool isCyclicUtilDirected(const Graph g, unsigned int v, bool visited[], bool* recStack, vector<int>& path);
             static bool isCyclicDirected(const Graph g);
+            static void printCycle(vector<int>& path);
+            static void removeAllTheVerticesFromPathTillI(vector<int>& path, unsigned int i);
     };  
 } 
 
