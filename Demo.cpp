@@ -17,12 +17,12 @@ int main()
         {0, 1, 0}};
     g.loadGraph(graph); // Load the graph to the object.
 
-    g.printGraph();                                    // Should print: "Graph with 3 vertices and 4 edges."
+    g.printGraph();                                    
     cout << "Is graph directed:" << g.isDirected() << endl;
     cout << "Is graph connected:" << Algorithms::isConnected(g) << endl; 
-    cout << Algorithms::shortestPath(g, 0, 2) << endl; // Should print: 0->1->2.
+    cout << Algorithms::shortestPath(g, 0, 2) << endl; 
     cout << Algorithms::isContainsCycle(g) << endl; 
-    cout << Algorithms::isBipartite(g) << endl;        // Should print: "The graph is bipartite: A={0, 2}, B={1}."
+    cout << Algorithms::isBipartite(g) << endl;        
 
     // 5x5 matrix that represents a non-connected graph with a cycle.
     const vector<vector<int>> graph2 = {
@@ -34,12 +34,12 @@ int main()
 
     g.loadGraph(graph2); // Load the graph to the object.
 
-    g.printGraph();            // Should print: "Graph with 5 vertices and 8 edges."
+    g.printGraph();            
     cout << "Is graph directed:" << g.isDirected() << endl;
     cout << "Is graph connected:" << Algorithms::isConnected(g) << endl;        
-    cout << Algorithms::shortestPath(g, 0, 4) << endl; // Should print: "-1" (there is no path between 0 and 4).
+    cout << Algorithms::shortestPath(g, 0, 4) << endl; 
     cout << Algorithms::isContainsCycle(g) << endl; 
-    cout << Algorithms::isBipartite(g) << endl;        // Should print: "0" (false).
+    cout << Algorithms::isBipartite(g) << endl;        
 
     // 5x5 matrix that reprsents a connected weighted graph.
     const vector<vector<int>> graph3 = {
@@ -48,14 +48,7 @@ int main()
         {0, 0, 0, 1, 1},
         {0, 0, 1, 0, 1},
         {0, 0, 1, 1, 0}
-    };
-    // const vector<vector<int>> graph3 = {
-    //     {0, 1, 2, 0, 0},
-    //     {1, 0, 0, 0, 0},
-    //     {2, 0, 0, 4, 0},
-    //     {0, 0, 4, 0, 5},
-    //     {0, 0, 0, 5, 0}
-    // };
+    };    
     
     g.loadGraph(graph3); // Load the graph to the object.
 
@@ -81,4 +74,23 @@ int main()
     {
         cout << e.what() << endl; // Should print: "Invalid graph: The graph is not a square matrix."
     }
+
+    // 7x7 matrix that represents a non-connected graph with a cycle.
+    const vector<vector<int>> graph5 = {
+        {0, 0, 0, 0, 0, 1, 0},
+        {0, 0, 0, 0, 0, 0, 1},
+        {0, 1, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 1, 0, 0},
+        {0, 0, 0, 0, 0, 0, 1},
+        {0, 0, 1, 0, 0, 0, 0},
+        {0, 0, 0, 1, 0, 0, 0},};
+
+    g.loadGraph(graph5); // Load the graph to the object.
+
+    g.printGraph();            
+    cout << "Is graph directed:" << g.isDirected() << endl;
+    cout << "Is graph connected:" << Algorithms::isConnected(g) << endl;        
+    cout << Algorithms::shortestPath(g, 0, 4) << endl; 
+    cout << Algorithms::isContainsCycle(g) << endl; 
+    cout << Algorithms::isBipartite(g) << endl;    
 }
