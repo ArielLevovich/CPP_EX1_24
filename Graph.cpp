@@ -6,7 +6,7 @@
 using namespace std;
 
 namespace ariel {
-    bool Graph::isSym(const vector<vector<int>> mtr){
+    bool Graph::isSymmetric(const vector<vector<int>> mtr){
         //function that checks if a matrix is symetric - means the graph is undirected.
         for (unsigned int i = 0; i < vertices; i++) {
             for (unsigned int j = 0; j < vertices; j++) { 
@@ -16,14 +16,25 @@ namespace ariel {
             }
         }
         return true;
-    } 
+    }
+    bool Graph::hasGraphNegativeWeight(const vector<vector<int>> mtr) {
+        for (unsigned int i = 0; i < vertices; i++) {
+            for (unsigned int j = 0; j < vertices; j++) { 
+                if (mtr[i][j] < 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }  
     void Graph::loadGraph(const vector<vector<int>> mtr) {
-            vertices = mtr.size();
-            if(isSym(mtr)){
-                setAdjMatrix(mtr,false);  //if the matrix is symetric , then set the bool isDirectedGraph = false
-            }else{
-                setAdjMatrix(mtr,true);
-            }     
+        vertices = mtr.size();
+        isNegativeWeight = hasGraphNegativeWeight(mtr); 
+        if(isSymmetric(mtr)){
+            setAdjMatrix(mtr,false);  //if the matrix is symmetric , then set the bool isDirectedGraph = false
+        }else{
+            setAdjMatrix(mtr,true);
+        }                
     }
     
     void Graph::printGraph() {
@@ -88,5 +99,9 @@ namespace ariel {
     
     bool Graph::isDirected() const {
         return isDirectedGraph;
+    }
+
+    bool Graph::hasNegativeWeight() const {
+        return isNegativeWeight;
     }
 }
