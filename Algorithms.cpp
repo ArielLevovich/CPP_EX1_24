@@ -281,10 +281,7 @@ namespace ariel {
             // then there exists a cycle in the graph.
             else if ((signed int)i != parent) {
                 // remove all the vertices from the "path" till the first appearance of "i"
-                auto it = std::find(path.begin(), path.end(), i);
-                if (it != path.end()) {                    
-                    path.erase(path.begin(), it);
-                }
+                Algorithms::removeAllTheVerticesFromPathTillI(path, i);                
                 // add the parent 'v' and its child node 'i'.
                 path.push_back(v);
                 path.push_back(i);
@@ -299,6 +296,7 @@ namespace ariel {
     // a cycle, else false.
     bool Algorithms::isCyclicUndirected(const Graph g)
     {
+        bool result = false;
         unsigned int V = g.getVertices();
         // Mark all the vertices as not
         // visited and not part of recursion
@@ -315,25 +313,21 @@ namespace ariel {
             // Don't recur for u if
             // it is already visited
             if (!visited[u]) {
-                vector<int> path;
+                vector<int> path;                
                 if (Algorithms::isCyclicUtilUndirected(g, u, visited, -1, path)) {
-                    cout << "Graph contains cycle:" << endl;
-                    for (size_t i = 0; i < path.size(); ++i) {
-                        std::cout << path[i];
-                        if (i != path.size() - 1) {
-                            std::cout << " -> ";
-                        }
-                    }
-                    std::cout << std::endl;  // For a new line at the end
-                    return true;
+                    Algorithms::printCycle(path);
+                    result = true;
                 }                
             }
         }
-        cout << "Graph doesn't contain cycle" << endl;
-        return false;
+        if (!result) {
+            cout << "Graph doesn't contain cycle" << endl;
+        }
+        delete[] visited;
+        return result;
     } 
     // DFS function to find if a cycle exists
-    bool Algorithms::isCyclicUtilDirected(const Graph g, unsigned int v, bool visited[], bool* recStack)
+    bool Algorithms::isCyclicUtilDirected(const Graph g, unsigned int v, bool visited[], bool* recStack, vector<int>& path)
     {
         vector<vector<int>> adj = g.getAdjMatrix();
         if (visited[v] == false) {
@@ -346,21 +340,28 @@ namespace ariel {
             // vertex
             for (unsigned int i = 0; i < g.getVertices(); i++) {
                 if (i == v || adj[v][i] == 0) continue;
-                if (!visited[i] && Algorithms::isCyclicUtilDirected(g, i, visited, recStack))
+                path.push_back(v);
+                if (!visited[i] && Algorithms::isCyclicUtilDirected(g, i, visited, recStack, path))
                     return true;
-                else if (recStack[i])
+                else if (recStack[i]) {
+                    // remove all the vertices from the "path" till the first appearance of "i"
+                    Algorithms::removeAllTheVerticesFromPathTillI(path, i); 
+                    path.push_back(i);
                     return true;
+                }
             }
         }
     
         // Remove the vertex from recursion stack
         recStack[v] = false;
+        // we do not need to remove "v" from the 'path' - because in the next call the new instance of 'path' will be used.
         return false;
     }
     
     // Returns true if the graph contains a cycle, else false
     bool Algorithms::isCyclicDirected(const Graph g)
     {
+        bool result = false;
         unsigned int V = g.getVertices();
         // Mark all the vertices as not visited
         // and not part of recursion stack
@@ -373,10 +374,38 @@ namespace ariel {
     
         // Call the recursive helper function
         // to detect cycle in different DFS trees
-        for (unsigned int i = 0; i < V; i++)
-            if (!visited[i] && Algorithms::isCyclicUtilDirected(g, i, visited, recStack))
-                return true;
-    
-        return false;
+        for (unsigned int i = 0; i < V; i++) {
+            vector<int> path;
+            if (!visited[i] && Algorithms::isCyclicUtilDirected(g, i, visited, recStack, path)) {
+                Algorithms::printCycle(path);
+                result = true;
+                break;
+            }
+        }
+
+        delete[] visited;
+        delete[] recStack;
+        if (!result) {
+            cout << "Graph doesn't contain cycle" << endl;
+        }
+        return result;
+    }
+
+    void Algorithms::printCycle(vector<int>& path) {
+        cout << "Graph contains cycle:" << endl;
+        for (size_t i = 0; i < path.size(); ++i) {
+            std::cout << path[i];
+            if (i != path.size() - 1) {
+                std::cout << " -> ";
+            }
+        }
+        std::cout << std::endl;  // For a new line at the end
+    }
+
+    void Algorithms::removeAllTheVerticesFromPathTillI(vector<int>& path, unsigned int i) {
+        auto it = std::find(path.begin(), path.end(), i);
+        if (it != path.end()) {                    
+            path.erase(path.begin(), it);
+        }
     }
 } 
