@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <sstream>
 #include "Algorithms.hpp"
+#include "NegativeCycleException.hpp"
 
 using namespace std;
 namespace ariel {
@@ -93,23 +94,22 @@ namespace ariel {
         return false;
     }   
 
-    bool Algorithms::isContainsCycle(const Graph g){
-        // vector<int> parent(g.getVertices(), -1);  
-        // vector<bool> visited(g.getVertices(), false);
-        // vector<bool> recStack(g.getVertices(), false);
-        
-        // for (unsigned int vertex = 0; vertex < g.getVertices(); vertex++) {
-        //     if (!visited[vertex]) {
-        //         if (detectCycleUtil(g, vertex, visited, parent, recStack)) {
-        //             return true;
-        //         }
-        //     }
-        // }
-        // return false;
-        if (g.isDirected()) {
-            return Algorithms::isCyclicDirected(g);            
+    bool Algorithms::isContainsCycle(const Graph g) {        
+        vector<int> path;
+        bool result = isContainsCycleInternal(g, path);
+        if (result) {
+            printCycle(path);
+        } else {
+            cout << "Graph doesn't contain a cycle" << endl;            
         }
-        return Algorithms::isCyclicUndirected(g);
+        return result;
+    }
+
+    bool Algorithms::isContainsCycleInternal(const Graph g, vector<int>& path) {
+        if (g.isDirected()) {
+            return isCyclicDirected(g, path);            
+        }
+        return isCyclicUndirected(g, path);
     }
 
     vector<int> Algorithms::bellmanFord(const Graph g, int src, int end) {
@@ -151,7 +151,7 @@ namespace ariel {
                 int u = path[i];
                 int v = path[i + 1];
                 if (dist[u] + g.getAdjMatrix()[u][v] < dist[v]) {
-                    throw runtime_error("Negative weight cycle affects the path - means there is no path from src -> dest");
+                    throw NegativeCycleException("The graph contains a negative weight cycle.");
                 }
             }
         }
@@ -173,7 +173,7 @@ namespace ariel {
                 ss << path[i];
             }
             return ss.str();
-        } catch (const runtime_error& e) {
+        } catch (const NegativeCycleException& e) {
             return e.what();  // Return the error message if a negative cycle is detected
         }
     }
@@ -241,17 +241,7 @@ namespace ariel {
         groupB += "}";
 
         return "The graph is bipartite: " + groupA + " " + groupB;
-    }
-
-    bool Algorithms::negativeCycle(const Graph g) {
-        //TODO: if there is a negative cycle in the graph, print a string
-        // a negative cycle was found with the cycle itself.
-        // otherwise: 'no negative cycle detected'.
-        if(!Algorithms::isContainsCycle(g)) {
-            return false;
-        }
-        return true;
-    }   
+    }    
 
     // A recursive function that
     // uses visited[] and parent to detect
@@ -272,7 +262,7 @@ namespace ariel {
             // then recur for that adjacent
             if (!visited[i]) {    
                 path.push_back(v);            
-                if (Algorithms::isCyclicUtilUndirected(g, i, visited, v, path))
+                if (isCyclicUtilUndirected(g, i, visited, v, path))
                     return true;
             }
     
@@ -281,7 +271,7 @@ namespace ariel {
             // then there exists a cycle in the graph.
             else if ((signed int)i != parent) {
                 // remove all the vertices from the "path" till the first appearance of "i"
-                Algorithms::removeAllTheVerticesFromPathTillI(path, i);                
+                removeAllTheVerticesFromPathTillI(path, i);                
                 // add the parent 'v' and its child node 'i'.
                 path.push_back(v);
                 path.push_back(i);
@@ -294,7 +284,7 @@ namespace ariel {
     
     // Returns true if the undirected graph contains
     // a cycle, else false.
-    bool Algorithms::isCyclicUndirected(const Graph g)
+    bool Algorithms::isCyclicUndirected(const Graph g, vector<int>& path)
     {
         bool result = false;
         unsigned int V = g.getVertices();
@@ -309,20 +299,16 @@ namespace ariel {
         // function to detect cycle in different
         // DFS trees
         for (unsigned int u = 0; u < V; u++) {
-    
+            path.clear();
             // Don't recur for u if
             // it is already visited
             if (!visited[u]) {
-                vector<int> path;                
-                if (Algorithms::isCyclicUtilUndirected(g, u, visited, -1, path)) {
-                    Algorithms::printCycle(path);
+                if (isCyclicUtilUndirected(g, u, visited, -1, path)) {
                     result = true;
+                    break;
                 }                
             }
-        }
-        if (!result) {
-            cout << "Graph doesn't contain cycle" << endl;
-        }
+        }        
         delete[] visited;
         return result;
     } 
@@ -340,12 +326,14 @@ namespace ariel {
             // vertex
             for (unsigned int i = 0; i < g.getVertices(); i++) {
                 if (i == v || adj[v][i] == 0) continue;
-                path.push_back(v);
-                if (!visited[i] && Algorithms::isCyclicUtilDirected(g, i, visited, recStack, path))
+                if (path.empty() || (unsigned int)path.back() != v) {
+                    path.push_back(v);
+                }
+                if (!visited[i] && isCyclicUtilDirected(g, i, visited, recStack, path))
                     return true;
                 else if (recStack[i]) {
                     // remove all the vertices from the "path" till the first appearance of "i"
-                    Algorithms::removeAllTheVerticesFromPathTillI(path, i); 
+                    removeAllTheVerticesFromPathTillI(path, i); 
                     path.push_back(i);
                     return true;
                 }
@@ -359,7 +347,7 @@ namespace ariel {
     }
     
     // Returns true if the graph contains a cycle, else false
-    bool Algorithms::isCyclicDirected(const Graph g)
+    bool Algorithms::isCyclicDirected(const Graph g, vector<int>& path)
     {
         bool result = false;
         unsigned int V = g.getVertices();
@@ -375,9 +363,8 @@ namespace ariel {
         // Call the recursive helper function
         // to detect cycle in different DFS trees
         for (unsigned int i = 0; i < V; i++) {
-            vector<int> path;
-            if (!visited[i] && Algorithms::isCyclicUtilDirected(g, i, visited, recStack, path)) {
-                Algorithms::printCycle(path);
+            path.clear();
+            if (!visited[i] && isCyclicUtilDirected(g, i, visited, recStack, path)) {                
                 result = true;
                 break;
             }
@@ -386,13 +373,38 @@ namespace ariel {
         delete[] visited;
         delete[] recStack;
         if (!result) {
-            cout << "Graph doesn't contain cycle" << endl;
+            path.clear();            
         }
         return result;
     }
 
+    bool Algorithms::hasNegativeCycle(const Graph g) {
+        bool result = false;   
+        vector<int> path;
+        if (isContainsCycleInternal(g, path) && g.hasNegativeWeight()) {
+            unsigned int numOfVrtx = g.getVertices();
+            for (unsigned int i = 0; i < numOfVrtx; i++) {
+                for (unsigned int j = 0; j < numOfVrtx; j++) {
+                    if (i == j) continue;
+                    try {
+                        vector<int> path = bellmanFord(g, i, j);                
+                    } catch (const NegativeCycleException& e) {
+                        cout << e.what() << endl;
+                        result = true;
+                    }            
+                    if (result) break;
+                }
+                if (result) break;
+            }
+        }
+        if (!result) {
+            cout << "Graph doesn't contain a negative cycle" << endl;
+        }
+        return result;
+    }   
+
     void Algorithms::printCycle(vector<int>& path) {
-        cout << "Graph contains cycle:" << endl;
+        cout << "Graph contains the cycle:" << endl;
         for (size_t i = 0; i < path.size(); ++i) {
             std::cout << path[i];
             if (i != path.size() - 1) {
