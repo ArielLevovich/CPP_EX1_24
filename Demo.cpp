@@ -113,5 +113,20 @@ int main()
     cout << Algorithms::shortestPath(g, 0, g.getVertices()-1) << endl;
     cout << Algorithms::isContainsCycle(g) << endl; 
     cout << Algorithms::hasNegativeCycle(g) << endl;
-    cout << Algorithms::isBipartite(g) << endl;    
+    cout << Algorithms::isBipartite(g) << endl;   
+
+    vector<vector<int>> graph7={{0, 10, -1, 1, 0},
+                                {10, 0, 10, 0, 0},
+                                {-1, 10, 0, 0, 2},
+                                {1, 0, 0, 0, 0},
+                                {0, 0, 2, 0, 0}};
+    g.loadGraph(graph7); // Load the graph to the object.
+
+    g.printGraph();            
+    cout << "Is graph directed:" << g.isDirected() << endl;
+    cout << "Is graph connected:" << Algorithms::isConnected(g) << endl;        
+    cout << Algorithms::shortestPath(g, 0, g.getVertices()-1) << endl;
+    cout << Algorithms::isContainsCycle(g) << endl; 
+    cout << Algorithms::hasNegativeCycle(g) << endl;
+    cout << Algorithms::isBipartite(g) << endl;   
 }
