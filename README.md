@@ -4,7 +4,7 @@
 
 #### Overview
 
-This README provides an exhaustive explanation of the functionalities and implementation details of the `Algorithms` and `Graph` classes written in C++. These classes demonstrate various graph-related algorithms such as depth-first search (DFS), cycle detection, shortest path calculations (using Bellman-Ford), and checks for bipartiteness, among others.
+This README provides a detailed explanation of the functionalities and implementation details of the `Algorithms` and `Graph` classes written in C++. These classes demonstrate various graph-related algorithms such as depth-first search (DFS), cycle detection, shortest path calculations (using Bellman-Ford), and checks for bipartiteness, among others.
 
 #### File Structure
 
@@ -28,6 +28,8 @@ The boolean `isDirectedGraph` indicates whether the graph is directed. This affe
 #### 4. **Negative Weight Detection**:
 The `isNegativeWeight` flag is set based on the presence of any negative weights in the graph. This is critical for algorithms that are sensitive to negative weights, like the shortest path finding, where the presence of negative cycles could invalidate certain algorithms like Dijkstra’s.
 
+---
+
 ### Key Methods and Their Functionalities
 
 #### **loadGraph(const vector<vector<int>>& mtr)**:
@@ -50,9 +52,7 @@ By using these components and methods, your `Graph` class provides a flexible an
 
 ---
 
-### Detailed Implementation of Key Functions in Algorithms.cpp
-
----
+### Detailed Implementation of Key Functions in Algorithms.cpp 
 
 #### isConnected()
 
