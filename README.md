@@ -48,8 +48,6 @@ Outputs a simple description of the graph, listing the number of vertices and ed
 - `setVertices(unsigned int v)`, `getVertices()`: Manage the number of vertices and resize the adjacency matrix accordingly.
 - `setAdjMatrix(const vector<vector<int>> graph, bool isDirectedGraph)`, `getAdjMatrix()`: Set or retrieve the adjacency matrix, ensuring that any set operation maintains the matrix's integrity as a square matrix.
 
-By using these components and methods, your `Graph` class provides a flexible and robust system for managing graphs in your C++ programs, whether they are simple or complex, weighted, directed, or undirected. This setup allows you to manipulate and analyze graph properties effectively, which is essential for the algorithms implemented in `Algorithms.cpp`.
-
 ---
 
 ### Detailed Implementation of Key Functions in Algorithms.cpp 
@@ -75,7 +73,8 @@ The `shortestPath()` function utilizes the Bellman-Ford algorithm to find the sh
 - **Output**: The `shortestPath()` function captures the output from `bellmanFord()` and formats it into a readable string describing the path, or returns an error message if a negative cycle is present.
 
 #### Limitation
-Bellman-Ford does not find the accurate shortest path in undirected graphs with negative weights.
+- Bellman-Ford does not find the accurate shortest path in undirected graphs with negative weights.
+  
 ---
 
 #### isContainsCycle()
