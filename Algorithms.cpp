@@ -84,7 +84,7 @@ namespace ariel {
                     reverse(cyclePath.begin(), cyclePath.end());
 
                     for (long unsigned int j = 0; j < cyclePath.size(); j++) {
-                        cout << cyclePath[j] << (j < (cyclePath.size() - 1)? " -> " : "");
+                        cout << cyclePath[j] << (j < (cyclePath.size() - 1)? "->" : "");
                     }
                     cout << endl;
                     return true;
@@ -121,23 +121,28 @@ namespace ariel {
         dist[src] = 0; // Initialize the distance to the source
         vector<vector<int>> adj = g.getAdjMatrix();
 
-        // Relax all edges |V| - 1 times        
-        for (int u = 0; u < vertices; ++u) {
-            for (int v = 0; v < vertices; ++v) {
-                if (u == v || adj[u][v] == 0) continue;
+        // Relax all edges |V| - 1 times     
+        for (int i = 0; i < vertices - 1; ++i) {
+            bool update = false;   
+            for (int u = 0; u < vertices; ++u) {
+                for (int v = 0; v < vertices; ++v) {
+                    if (u == v || adj[u][v] == 0) continue;
 
-                if (v != src && dist[u] != INT_MAX && dist[u] + adj[u][v] < dist[v]) {
-                    dist[v] = dist[u] + g.getAdjMatrix()[u][v];
-                    parent[v] = u;                    
+                    if (v != src && dist[u] != INT_MAX && dist[u] + adj[u][v] < dist[v]) {
+                        dist[v] = dist[u] + adj[u][v];
+                        parent[v] = u;  
+                        update = true;                  
+                    }
                 }
             }
+            if (!update) break; // Early exit if no update in a whole pass
         }
         
         // Construct the path from src to end if reachable
         vector<int> path;
         if (dist[end] == INT_MAX) return path; // Return empty if no path
 
-        for (int at = end; at != -1; at = parent[at]) {
+        for (int at = end; at != -1 && path.size() < (size_t)vertices; at = parent[at]) {
             path.push_back(at);
             if (at == src) break;
         }
@@ -158,50 +163,7 @@ namespace ariel {
         }
 
         return path;
-    }   
-    // vector<int> Algorithms::bellmanFord(const Graph g, int src, int end) {
-    //     vector<int> path;        
-    //     int V = g.getVertices();
-    //     vector<vector<int>> adj = g.getAdjMatrix();
-    //     int dist[V];
-
-    //     // Step 1: Initialize distances from src to all other
-    //     // vertices as INFINITE
-    //     for (int i = 0; i < V; i++)
-    //         dist[i] = INT_MAX;
-    //     dist[src] = 0;
-    //     path.push_back(src);
-
-    //     // Step 2: Relax all edges |V| - 1 times. A simple
-    //     // shortest path from src to any other vertex can have
-    //     // at-most |V| - 1 edges
-    //     for (int i = 0; i < V; i++) {
-    //         for (int j = 0; j < V; j++) {
-    //             if (i == j || adj[i][j] == 0) continue;
-    //             int weight = adj[i][j];
-    //             if (dist[i] != INT_MAX && dist[i] + weight < dist[j]) {
-    //                 path.push_back(j);
-    //                 dist[j] = dist[i] + weight;
-    //             }
-    //         }
-    //     }
-
-    //     // Step 3: check for negative-weight cycles.  The above
-    //     // step guarantees shortest distances if graph doesn't
-    //     // contain negative weight cycle.  If we get a shorter
-    //     // path, then there is a cycle.
-    //     for (int i = 0; i < V; i++) {
-    //         for (int j = 0; j < V; j++) {
-    //             if (i == j || adj[i][j] == 0) continue;
-    //             int weight = adj[i][j];
-    //             if (dist[i] != INT_MAX && dist[i] + weight < dist[j]) {
-    //                 throw NegativeCycleException("The graph contains a negative weight cycle.");
-    //             }            
-    //         }
-    //     }                  
-
-    //     return path;
-    // }
+    }       
 
     std::string Algorithms::shortestPath(const Graph g, int src, int dest) {
         try {
@@ -211,9 +173,8 @@ namespace ariel {
             }
 
             stringstream ss;
-            ss << "Path from " << src << " to " << dest << ": ";
             for (size_t i = 0; i < path.size(); ++i) {
-                if (i > 0) ss << " -> ";
+                if (i > 0) ss << "->";
                 ss << path[i];
             }
             return ss.str();
@@ -285,7 +246,7 @@ namespace ariel {
         groupA += "}";
         groupB += "}";
 
-        return "The graph is bipartite: " + groupA + " " + groupB;
+        return "The graph is bipartite: " + groupA + ", " + groupB;
     }    
 
     // A recursive function that
@@ -449,11 +410,11 @@ namespace ariel {
     }   
 
     void Algorithms::printCycle(vector<int>& path) {
-        cout << "Graph contains the cycle:" << endl;
+        // cout << "Graph contains the cycle:" << endl;
         for (size_t i = 0; i < path.size(); ++i) {
             std::cout << path[i];
             if (i != path.size() - 1) {
-                std::cout << " -> ";
+                std::cout << "->";
             }
         }
         std::cout << std::endl;  // For a new line at the end
