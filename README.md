@@ -98,6 +98,8 @@ This function is crucial for validating graphs before applying algorithms that a
   - `printCycle()`: Prints a cycle found in the graph.
   - `removeAllTheVerticesFromPathTillI()`: Utility function used in cycle detection to modify the path to illustrate the cycle properly.
 
+---
+
 #### Compilation and Execution
 
 To compile and run these implementations, make sure to link both `.cpp` files with their respective headers and ensure all dependencies are met. Use the following commands:
