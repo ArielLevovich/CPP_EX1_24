@@ -12,22 +12,43 @@ This README provides an exhaustive explanation of the functionalities and implem
 - **Graph.cpp**: Defines the structure of the graph and its properties like adjacency matrix, whether it is directed, and if it has negative weights.
 
 #### Graph.cpp
+The `Graph.cpp` file defines the structure and behavior of a graph in your C++ program through the `Graph` class. This class is designed to manage the graph's essential properties, such as its vertices, adjacency matrix, directed status, and presence of negative weights. Here’s how you chose to implement the management and functionality of any graph using this class:
 
-**Class `Graph`**:
-- **Attributes**:
-  - `vertices`: Number of vertices in the graph.
-  - `adjMatrix`: Adjacency matrix representing the graph.
-  - `isDirectedGraph`: Boolean indicating if the graph is directed.
-  - `isNegativeWeight`: Boolean indicating if the graph contains any negative weights.
+### Key Components of Graph Implementation
 
-**Key Methods**:
-- `isSymmetric()`: Checks if the adjacency matrix is symmetric, implying an undirected graph.
-- `hasGraphNegativeWeight()`: Verifies if any edge in the graph has negative weight.
-- `loadGraph()`: Initializes the graph properties based on the input matrix.
-- `printGraph()`: Outputs the number of vertices and edges.
-- `setVertices()`, `getVertices()`: Set or get the number of vertices.
-- `setAdjMatrix()`, `getAdjMatrix()`: Set or get the adjacency matrix.
-- `isDirected()`, `hasNegativeWeight()`: Return the respective boolean properties.
+#### 1. **Adjacency Matrix**:
+The `adjMatrix` is a two-dimensional vector (`vector<vector<int>>`) that represents the edges between the vertices in the graph. Each cell in the matrix, `adjMatrix[i][j]`, holds a value indicating the weight or presence of an edge between vertex `i` and vertex `j`. If there is no edge, it typically holds a value of zero.
+
+#### 2. **Vertices**:
+The `vertices` attribute stores the number of vertices in the graph. This is crucial for iterating over the graph and for resizing the adjacency matrix when the number of vertices changes.
+
+#### 3. **Directed or Undirected Graph**:
+The boolean `isDirectedGraph` indicates whether the graph is directed. This affects several functionalities, such as how edges are added to the adjacency matrix and how certain algorithms, like checking if the graph is bipartite or symmetric, are executed.
+
+#### 4. **Negative Weight Detection**:
+The `isNegativeWeight` flag is set based on the presence of any negative weights in the graph. This is critical for algorithms that are sensitive to negative weights, like the shortest path finding, where the presence of negative cycles could invalidate certain algorithms like Dijkstra’s.
+
+### Key Methods and Their Functionalities
+
+#### **loadGraph(const vector<vector<int>>& mtr)**:
+This method initializes the graph with a given adjacency matrix. It sets the number of vertices based on the size of the matrix and determines whether the graph is directed by checking if the matrix is symmetric. It also checks for negative weights to set the `isNegativeWeight` flag appropriately.
+
+#### **isSymmetric(const vector<vector<int>>& mtr)**:
+Checks if the given matrix is symmetric. This is used to determine if the graph should be treated as undirected. In an undirected graph, for any two vertices `i` and `j`, the edge weight from `i` to `j` should be equal to that from `j` to `i` (`mtr[i][j] == mtr[j][i]`).
+
+#### **hasGraphNegativeWeight(const vector<vector<int>>& mtr)**:
+Evaluates whether the adjacency matrix contains any negative weights. This information is vital for algorithms that need to know whether the graph has any negative weight edges.
+
+#### **printGraph()**:
+Outputs a simple description of the graph, listing the number of vertices and edges. The method counts edges differently based on whether the graph is directed or undirected.
+
+#### **Setter and Getter Methods**:
+- `setVertices(unsigned int v)`, `getVertices()`: Manage the number of vertices and resize the adjacency matrix accordingly.
+- `setAdjMatrix(const vector<vector<int>> graph, bool isDirectedGraph)`, `getAdjMatrix()`: Set or retrieve the adjacency matrix, ensuring that any set operation maintains the matrix's integrity as a square matrix.
+
+By using these components and methods, your `Graph` class provides a flexible and robust system for managing graphs in your C++ programs, whether they are simple or complex, weighted, directed, or undirected. This setup allows you to manipulate and analyze graph properties effectively, which is essential for the algorithms implemented in `Algorithms.cpp`.
+
+---
 
 ### Detailed Implementation of Key Functions in Algorithms.cpp
 
