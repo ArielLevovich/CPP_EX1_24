@@ -5,7 +5,7 @@ VALGRIND_FLAGS=-v --leak-check=full --show-leak-kinds=all  --error-exitcode=99
 SOURCES=Graph.cpp Algorithms.cpp TestCounter.cpp Test.cpp
 OBJECTS=$(subst .cpp,.o,$(SOURCES))
 
-run: demo
+run: test
 	./$^
 
 demo: Demo.o Graph.o Algorithms.o
@@ -14,7 +14,6 @@ demo: Demo.o Graph.o Algorithms.o
 test: TestCounter.o Test.o Graph.o Algorithms.o
 	$(CXX) $(CXXFLAGS) $^ -o test
 
- # Note: clang-tidy removed since it's specific to Clang. Consider using cppcheck or another tool if needed.
 tidy:
 	cppcheck --enable=all --suppress=missingIncludeSystem $(SOURCES)
 
