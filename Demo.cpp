@@ -86,7 +86,7 @@ int main()
         {0, 0, 0, 0, 1, 0, 0},
         {0, 0, 0, 0, 0, 0, 1},
         {0, 0, 1, 0, 0, 0, 0},
-        {0, 0, 0, 1, 0, 0, 0},};
+        {0, 0, 0, 1, 0, 0, 0}};
 
     g.loadGraph(graph5); // Load the graph to the object.
 
@@ -97,8 +97,9 @@ int main()
     cout << Algorithms::isContainsCycle(g) << endl; 
     cout << Algorithms::hasNegativeCycle(g) << endl;
     cout << Algorithms::isBipartite(g) << endl;    
+    cout << Algorithms::shortestPath(g, 0, 1) << endl;
 
-    // 7x7 matrix that represents a non-connected graph with a cycle.
+    // 4x4 matrix that represents a non-connected graph with a cycle.
     const vector<vector<int>> graph6 = {
         {0, 0, 0, 0},
         {4, 0, -6, 0},
@@ -128,5 +129,5 @@ int main()
     cout << Algorithms::shortestPath(g, 0, g.getVertices()-1) << endl;
     cout << Algorithms::isContainsCycle(g) << endl; 
     cout << Algorithms::hasNegativeCycle(g) << endl;
-    cout << Algorithms::isBipartite(g) << endl;   
+    cout << Algorithms::isBipartite(g) << endl;      
 }
