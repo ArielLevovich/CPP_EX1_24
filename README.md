@@ -1,4 +1,4 @@
-### Comprehensive README.md for Algorithms and Graph Classes
+### README.md - Algorithms and Graph Classes - Ariel Leibovich - 326535242
 
 ---
 
