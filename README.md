@@ -63,8 +63,6 @@ The `isConnected()` function determines if the graph is connected. This function
 - **DFS Execution**: The `dfs()` function is called with the starting vertex 0. It recursively visits all vertices that are directly or indirectly connected to vertex 0 by following edges that have non-zero weights in the adjacency matrix.
 - **Connectivity Check**: After the DFS completes, the function checks if all vertices were visited. If any vertex was not visited, the function returns `false`, indicating that the graph is not connected. Otherwise, it returns `true`.
 
-This method effectively checks connectivity for both directed and undirected graphs, though for directed graphs, it specifically checks for reachability from the first vertex.
-
 ---
 
 #### shortestPath()
@@ -76,8 +74,8 @@ The `shortestPath()` function utilizes the Bellman-Ford algorithm to find the sh
 - **Negative Cycle Detection**: After relaxing edges, it checks if any further relaxation would decrease the distance, indicating a negative-weight cycle.
 - **Output**: The `shortestPath()` function captures the output from `bellmanFord()` and formats it into a readable string describing the path, or returns an error message if a negative cycle is present.
 
-This function is particularly useful for graphs with potentially negative weights and can indicate the unsuitability of the graph for certain applications due to negative cycles.
-
+#### Limitation
+Bellman-Ford does not find the accurate shortest path in undirected graphs with negative weights.
 ---
 
 #### isContainsCycle()
