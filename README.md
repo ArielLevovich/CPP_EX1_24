@@ -12,7 +12,7 @@ This README provides a detailed explanation of the functionalities and implement
 - **Graph.cpp**: Defines the structure of the graph and its properties like adjacency matrix, whether it is directed, and if it has negative weights.
 
 #### Graph.cpp
-The `Graph.cpp` file defines the structure and behavior of a graph in your C++ program through the `Graph` class. This class is designed to manage the graph's essential properties, such as its vertices, adjacency matrix, directed status, and presence of negative weights. Here’s how you chose to implement the management and functionality of any graph using this class:
+The `Graph.cpp` file defines the structure and behavior of a graph in your C++ program through the `Graph` class. This class is designed to manage the graph's essential properties, such as its vertices, adjacency matrix, directed status, and presence of negative weights. 
 
 ### Key Components of Graph Implementation
 
@@ -23,7 +23,7 @@ The `adjMatrix` is a two-dimensional vector (`vector<vector<int>>`) that represe
 The `vertices` attribute stores the number of vertices in the graph. This is crucial for iterating over the graph and for resizing the adjacency matrix when the number of vertices changes.
 
 #### 3. **Directed or Undirected Graph**:
-The boolean `isDirectedGraph` indicates whether the graph is directed. This affects several functionalities, such as how edges are added to the adjacency matrix and how certain algorithms, like checking if the graph is bipartite or symmetric, are executed.
+The boolean `isDirectedGraph` indicates whether the graph is directed. When we load the graph, we check if the matrix is symetric (given by the vector<vector<int>>), if the matrix is indeed symetric, we set the boolean to true, else false. 
 
 #### 4. **Negative Weight Detection**:
 The `isNegativeWeight` flag is set based on the presence of any negative weights in the graph. This is critical for algorithms that are sensitive to negative weights, like the shortest path finding, where the presence of negative cycles could invalidate certain algorithms like Dijkstra’s.
