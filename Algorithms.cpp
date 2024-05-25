@@ -156,7 +156,7 @@ namespace ariel {
             for (size_t i = 0; i < last; ++i) {
                 int u = path[i];
                 int v = path[(i + 1) % path.size()];
-                if (dist[u] + g.getAdjMatrix()[u][v] < dist[v]) {                 
+                if (g.getAdjMatrix()[u][v] != 0 && dist[u] + g.getAdjMatrix()[u][v] < dist[v]) {                 
                     throw NegativeCycleException("The graph contains a negative weight cycle.");
                 }
             }
