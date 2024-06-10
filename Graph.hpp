@@ -14,15 +14,15 @@ namespace ariel {
             bool isNegativeWeight;
         public:
             void printGraph();
-            void loadGraph(const std::vector<std::vector<int>> graph);
+            void loadGraph(const std::vector<std::vector<int>>& mtr);
             unsigned int getVertices() const;            
-            const vector<vector<int>> getAdjMatrix() const;            
+            const vector<vector<int>>& getAdjMatrix() const;            
             bool isDirected() const;         
             bool hasNegativeWeight() const;   
         private:
-            void setAdjMatrix(const vector<vector<int>> matrix, bool isDirected);
-            bool isSymmetric(const vector<vector<int>> mtr);
+            void setAdjMatrix(const vector<vector<int>>& mtr, bool isDirected);
+            bool isSymmetric(const vector<vector<int>>& mtr) const;
             void setVertices(unsigned int v);            
-            bool hasGraphNegativeWeight(const vector<vector<int>> mtr);
+            bool hasGraphNegativeWeight(const vector<vector<int>>& mtr) const;
     };
 }
