@@ -12,7 +12,7 @@
 
 using namespace std;
 namespace ariel {
-    void Algorithms::dfs(const Graph g, int v, vector<bool>& visited) {
+    void Algorithms::dfs(const Graph& g, int v, vector<bool>& visited) {
         visited[v] = true;
         for (unsigned int i = 0; i < g.getVertices(); ++i) {
             if (g.getAdjMatrix()[v][i] != 0 && !visited[i]) {
@@ -21,14 +21,18 @@ namespace ariel {
         }
     }
 
-    bool Algorithms::isConnected(const Graph g) {
-        if (g.getVertices() == 0) return true; // An empty graph is trivially connected
+    bool Algorithms::isConnected(const Graph& g) {
+        if (g.getVertices() == 0) {
+            return true; // An empty graph is trivially connected
+        }
 
         vector<bool> visited(g.getVertices(), false);
         dfs(g, 0, visited); // Start DFS from vertex 0
 
         for (bool visit : visited) {
-            if (!visit) return false; // If any vertex is not visited, the graph is not connected
+            if (!visit) {
+                return false; // If any vertex is not visited, the graph is not connected
+            }
         }
         return true;
     }
@@ -61,7 +65,7 @@ namespace ariel {
         4. **End of Function**: After checking all adjacent vertices, the current vertex is removed from the recursion stack (indicating that all connections from this vertex have been fully explored), and the function returns `false` if no cycles involving the current vertex were found during its exploration.
         
     */
-    bool Algorithms::detectCycleUtil(const Graph g, unsigned int v, vector<bool>& visited, vector<int>& parent, vector<bool>& recStack) {
+    bool Algorithms::detectCycleUtil(const Graph& g, unsigned int v, vector<bool>& visited, vector<int>& parent, vector<bool>& recStack) {
         visited[v] = true;
         recStack[v] = true;
 
@@ -95,7 +99,7 @@ namespace ariel {
         return false;
     }   
 
-    bool Algorithms::isContainsCycle(const Graph g) {        
+    bool Algorithms::isContainsCycle(const Graph& g) {        
         vector<int> path;
         bool result = isContainsCycleInternal(g, path);
         if (result) {
@@ -106,14 +110,14 @@ namespace ariel {
         return result;
     }
 
-    bool Algorithms::isContainsCycleInternal(const Graph g, vector<int>& path) {
+    bool Algorithms::isContainsCycleInternal(const Graph& g, vector<int>& path) {
         if (g.isDirected()) {
             return isCyclicDirected(g, path);            
         }
         return isCyclicUndirected(g, path);
     }
 
-    vector<int> Algorithms::bellmanFord(const Graph g, int src, int end) {
+    vector<int> Algorithms::bellmanFord(const Graph& g, int src, int end) {
         int vertices = g.getVertices();
         vector<int> dist(vertices, INT_MAX);
         vector<int> parent(vertices, -1);
@@ -165,7 +169,7 @@ namespace ariel {
         return path;
     }       
 
-    std::string Algorithms::shortestPath(const Graph g, int src, int dest) {
+    std::string Algorithms::shortestPath(const Graph& g, int src, int dest) {
         try {
             vector<int> path = bellmanFord(g, src, dest);
             if (path.empty()) {
@@ -253,7 +257,7 @@ namespace ariel {
     // uses visited[] and parent to detect
     // cycle in subgraph reachable
     // from vertex v.
-    bool Algorithms::isCyclicUtilUndirected(const Graph g, unsigned int v, bool visited[], int parent, vector<int>& path)
+    bool Algorithms::isCyclicUtilUndirected(const Graph& g, unsigned int v, bool visited[], int parent, vector<int>& path)
     {
         vector<vector<int>> adj = g.getAdjMatrix();
         // Mark the current node as visited
@@ -290,7 +294,7 @@ namespace ariel {
     
     // Returns true if the undirected graph contains
     // a cycle, else false.
-    bool Algorithms::isCyclicUndirected(const Graph g, vector<int>& path)
+    bool Algorithms::isCyclicUndirected(const Graph& g, vector<int>& path)
     {
         bool result = false;
         unsigned int V = g.getVertices();
@@ -319,10 +323,10 @@ namespace ariel {
         return result;
     } 
     // DFS function to find if a cycle exists
-    bool Algorithms::isCyclicUtilDirected(const Graph g, unsigned int v, bool visited[], bool* recStack, vector<int>& path)
+    bool Algorithms::isCyclicUtilDirected(const Graph& g, unsigned int v, bool visited[], bool* recStack, vector<int>& path)
     {
         vector<vector<int>> adj = g.getAdjMatrix();
-        if (visited[v] == false) {
+        if (!visited[v]) {
             // Mark the current node as visited
             // and part of recursion stack
             visited[v] = true;
@@ -335,9 +339,10 @@ namespace ariel {
                 if (path.empty() || (unsigned int)path.back() != v) {
                     path.push_back(v);
                 }
-                if (!visited[i] && isCyclicUtilDirected(g, i, visited, recStack, path))
+                if (!visited[i] && isCyclicUtilDirected(g, i, visited, recStack, path)) {
                     return true;
-                else if (recStack[i]) {
+                }
+                if (recStack[i]) {
                     // remove all the vertices from the "path" till the first appearance of "i"
                     removeAllTheVerticesFromPathTillI(path, i); 
                     path.push_back(i);
@@ -353,7 +358,7 @@ namespace ariel {
     }
     
     // Returns true if the graph contains a cycle, else false
-    bool Algorithms::isCyclicDirected(const Graph g, vector<int>& path)
+    bool Algorithms::isCyclicDirected(const Graph& g, vector<int>& path)
     {
         bool result = false;
         unsigned int V = g.getVertices();
@@ -384,7 +389,7 @@ namespace ariel {
         return result;
     }
 
-    bool Algorithms::hasNegativeCycle(const Graph g) {
+    bool Algorithms::hasNegativeCycle(const Graph& g) {
         bool result = false;   
         vector<int> path;
         if (isContainsCycleInternal(g, path) && g.hasNegativeWeight()) {
