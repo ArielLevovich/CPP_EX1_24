@@ -1,12 +1,11 @@
 #include <iostream>
 #include <vector>
-#include <iostream>
 #include "Graph.hpp"
 
 using namespace std;
 
 namespace ariel {
-    bool Graph::isSymmetric(const vector<vector<int>> mtr){
+    bool Graph::isSymmetric(const vector<vector<int>>& mtr) const {
         //function that checks if a matrix is symetric - means the graph is undirected.
         for (unsigned int i = 0; i < vertices; i++) {
             for (unsigned int j = 0; j < vertices; j++) { 
@@ -17,7 +16,7 @@ namespace ariel {
         }
         return true;
     }
-    bool Graph::hasGraphNegativeWeight(const vector<vector<int>> mtr) {
+    bool Graph::hasGraphNegativeWeight(const vector<vector<int>>& mtr) const {
         for (unsigned int i = 0; i < vertices; i++) {
             for (unsigned int j = 0; j < vertices; j++) { 
                 if (mtr[i][j] < 0) {
@@ -27,7 +26,7 @@ namespace ariel {
         }
         return false;
     }  
-    void Graph::loadGraph(const vector<vector<int>> mtr) {
+    void Graph::loadGraph(const vector<vector<int>>& mtr) {
         vertices = mtr.size();
         isNegativeWeight = hasGraphNegativeWeight(mtr); 
         if(isSymmetric(mtr)){
@@ -80,20 +79,20 @@ namespace ariel {
     }
 
     // Getter for the adjacency matrix
-    const vector<vector<int>> Graph::getAdjMatrix() const {
+    const vector<vector<int>>& Graph::getAdjMatrix() const {
         return adjMatrix;
     }
 
     // Setter for the adjacency matrix
-    void Graph::setAdjMatrix(const vector<vector<int>> graph, bool isDirectedGraph) {
+    void Graph::setAdjMatrix(const vector<vector<int>>& mtr, bool isDirectedGraph) {
         // Check if the matrix is square
-        unsigned int rows = graph.size();
-        for (const auto& row : graph) {
+        unsigned int rows = mtr.size();
+        for (const auto& row : mtr) {
             if (row.size() != rows) {
                 throw std::invalid_argument("Invalid graph: The graph is not a square matrix.");
             }
         }
-        this->adjMatrix = graph;
+        this->adjMatrix = mtr;
         this->isDirectedGraph = isDirectedGraph;
     }    
     
